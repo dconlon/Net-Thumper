@@ -171,13 +171,18 @@ sub BUILD {
 
 =head1 METHODS
 
-=head2 connect( login => 'login', password => 'password' )
+=head2 connect( login => 'login', password => 'password', virtual_host => '/' )
 
 Connects to the server. Additionally sends all handshake frames necessary to 
 start a connection.
 
-Accepts two optional parameters, 'login' and 'password', which both default
-to 'guest'.
+Optional parameters are:
+
+* login - username to authenticare with, defaults to 'guest'
+
+* password - password to authenticare with, defaults to 'guest'
+
+* virtual_host - virtual host to connect to, defaults to '/'
 
 =cut
 
@@ -232,7 +237,7 @@ sub connect {
     $self->_write_frame($tune_ok, 0);
         
     my $connection_open = Net::AMQP::Protocol::Connection::Open->new(
-        virtual_host => '/',
+        virtual_host => $params{virtual_host} // '/',
         capabilities => '',
         insist       => 1,
     );
